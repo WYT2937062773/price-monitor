@@ -35,10 +35,12 @@ document.getElementById("go").onclick = async () => {
   const msg = document.getElementById("msg");
   if(!u){ msg.textContent = "请输入门店账号"; return; }
   try{
-    const m = await (await fetch("manifest.json?t=" + Date.now())).json();
+    // 根目录入口 → off/，off/ 目录内入口 → 同目录
+    const base = location.pathname.includes("/off/") ? "" : "off/";
+    const m = await (await fetch(base + "manifest.json?t=" + Date.now())).json();
     const hit = m[u];
     if(!hit){ msg.textContent = "没有这个账号"; return; }
-    location.href = hit.f;
+    location.href = base + hit.f;
   }catch(e){ msg.textContent = "加载失败：" + e; }
 };
 document.getElementById("u").onkeydown = e => { if(e.key === "Enter") document.getElementById("go").click(); };
